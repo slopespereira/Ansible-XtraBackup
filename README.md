@@ -1,6 +1,6 @@
 # XtraBackup Com Ansible
 Projeto desenvolvido para automatizar os backups do MySQL com XtraBackup, os backups serão padronizados independendte da versão do MySQL, caso o XtraBackup não esteija instalado, ele será instalado automaticamente.
-###Features
+### Features
 - Verifica versão do Sistema Operacional
 - Checa a versão do MySQL
 - Checa se o  MySQL está UP
