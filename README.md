@@ -11,7 +11,7 @@ Projeto desenvolvido para automatizar os backups do MySQL com XtraBackup, os bac
 
 
 
-###Reference
+### Reference
 
 [Percona XtraBackup 2.4 Documentation](https://www.percona.com/doc/percona-xtrabackup/2.4/backup_scenarios/full_backup.html#restoring-a-backup "Percona XtraBackup 2.4 Documentation")
 
@@ -19,7 +19,7 @@ Projeto desenvolvido para automatizar os backups do MySQL com XtraBackup, os bac
 
 
 
-###Executar a Playbook
+### Executar a Playbook
 
 
 `$ ansible-playbook -i hosts site.yml -u USER -l xtrabackup -k`
