@@ -19,7 +19,15 @@ Projeto desenvolvido para automatizar os backups do MySQL com XtraBackup, os bac
 
 
 
+### Variáveis
+```yaml
+my_cnf: /etc/my.cnf
+backupdir: /backup
+backupinc: /incremental
+datadir: /var/lib/mysql
+backuptype: full-backuped
+# full-backuped or incremental
+```
 ### Executar a Playbook
-
 
 `$ ansible-playbook -i hosts site.yml -u USER -l xtrabackup -k`
