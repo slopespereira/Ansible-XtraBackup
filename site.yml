@@ -1,0 +1,11 @@
+---
+# This Playbook to mysql Backup XtraBackup
+- hosts: all
+  gather_facts: true
+  roles:
+  - role: common
+
+- hosts: xtrabackup
+  gather_facts: true
+  roles:
+  - role: xtrabackup

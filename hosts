@@ -1,0 +1,3 @@
+#The site wide list of MySQL servers
+[xtrabackup]
+192.168.56.105

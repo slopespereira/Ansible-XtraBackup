@@ -1,0 +1,19 @@
+galaxy_info:
+  author: Sidinei Pereira Lopes
+  description: Automatic Backup MySQL version 5.7 and 8.x Linux RHEL.
+  company: "x"
+  license: "license (BSD, MIT)"
+  min_ansible_version: 2.9
+  platforms:
+    - name: EL
+      versions:
+        - 6
+        - 7
+    - name: MySQL
+      versions:
+        - 5.7
+        - 8.0
+
+
+  galaxy_tags:
+    - service

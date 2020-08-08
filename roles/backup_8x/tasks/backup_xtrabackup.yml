@@ -1,0 +1,43 @@
+---
+- name: Backup XtraBackup  directory "{{ dir_mysql }}"/mysql_backup/.xtrabackup - log /tmp/xtrabackup.log
+  shell: |
+        ulimit -n 1048576
+        xtrabackup --port=3360 --no-timestamp --parallel=5 --backup --target-dir="{{ backupdir }}" 2> /tmp/xtrabackup.log
+  args:
+    executable: /bin/bash
+
+- name: Backup XtraBackup  directory "{{ backupdir }}" - log /tmp/xtrabackup.log
+  shell: |
+        ulimit -n 1048576
+        xtrabackup --backup --target-dir="{{ backupinc }}" --incremental-basedir="{{ backupdir }}"
+  args:
+    executable: /bin/bash
+  when: backuptype == "incremental"
+
+- name: Check Backup XtraBackup
+  shell: if tail -2 /tmp/xtrabackup.log | grep -v grep | grep -i "completed\|Ok"  > /dev/null; then echo Ok; else echo Erro; fi
+  register: check_xtraBackup
+
+- name: LSN Backup
+  shell: tail -2 /tmp/xtrabackup.log | grep Transaction |sed 's/"//g;s/\[//g;s/\]//g'| tr ',' '\n' | cut -f2 -d ":"
+  register: lsn_backup
+
+- name: Error XtraBackup
+  fail:
+    msg: |
+      "-- FAILED -- Ops! XtraBackup executed with error, aborting update - Verify /tmp/xtrabackup.log"
+  failed_when: "{{ item }}"
+  with_items:
+    - 'check_xtraBackup.stdout.find("Erro") != -1'
+
+- name: Preparing a Backup
+  shell: |
+        ulimit -n 1048576
+        xtrabackup --prepare --target-dir="{{ backupdir }}" 2> /tmp/xtrabackup_preparing.log
+  args:
+    executable: /bin/bash
+  when: backuptype == "full-backuped"
+
+- name: LSN Preparing
+  shell: tail -2 /tmp/xtrabackup_preparing.log  | grep Shutdown |sed 's/"//g;s/\[//g;s/\]//g'| tr ',' '\n' | cut -f2 -d ":"
+  register: lsn_preparing

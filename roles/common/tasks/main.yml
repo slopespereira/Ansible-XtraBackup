@@ -1,0 +1,30 @@
+---
+# This Playbook runs all the common plays in the deployment
+- name: Fail if not RHEL
+  fail:
+    msg: |
+      "Ops! Esta playbook só funciona em servidores RHEL >6"
+  failed_when:
+    - ansible_distribution == "CentOS" and ansible_distribution_major_version == '6' 
+    - ansible_distribution_major_version == '7' 
+    - ansible_distribution == "OracleLinux" and ansible_distribution_major_version == '6' 
+    - ansible_distribution_major_version == '7' 
+
+- name: Include task for get_version.yml
+  import_role:
+    name: common
+    tasks_from: get_version.yml
+
+- name: Gather the rpm package facts
+  package_facts:
+    manager: auto
+
+- name: Include task for wait_3306.yml
+  import_role:
+    name: common
+    tasks_from: wait_3306.yml
+
+- name: Include task for rpm_install.yml
+  include: rpm_install.yml
+  when:
+    - "'percona-xtrabackup-*' not in ansible_facts.packages"

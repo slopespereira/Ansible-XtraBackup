@@ -1,0 +1,6 @@
+my_cnf: /etc/my.cnf
+backupdir: /backup
+backupinc: /incremental
+datadir: /var/lib/mysql
+backuptype: full-backuped
+# full-backuped or incremental

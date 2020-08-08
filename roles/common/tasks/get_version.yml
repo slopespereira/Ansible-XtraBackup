@@ -1,0 +1,4 @@
+---
+- name: Get package version
+  shell: mysql -V  2>/dev/null
+  register: mysql_version

@@ -1,0 +1,22 @@
+---
+- name: Configuring repository
+  yum:
+    name: https://repo.percona.com/yum/percona-release-latest.noarch.rpm
+    state: present
+    validate_certs: no
+
+- name: Install XtraBackup for MySQL 5.x
+  yum:
+    name:
+      - qpress
+      - percona-xtrabackup-24
+    state: present
+  when: mysql_version.stdout.find("5.") != -1
+
+- name: Install XtraBackup for MySQL 8.x
+  yum:
+    name:
+      - qpress
+      - percona-xtrabackup-80
+    state: present
+  when: mysql_version.stdout.find("8.") != -1

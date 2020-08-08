@@ -1,0 +1,28 @@
+---
+- name: Backup XtraBackup for MySQL 5.x
+  import_role:
+    name: backup_5x
+    tasks_from: backup_xtrabackup.yml
+  when: mysql_version.stdout.find("5.") != -1
+
+- name: Backup XtraBackup for MySQL 8.x
+  import_role:
+    name: backup_8x
+    tasks_from: backup_xtrabackup.yml
+  when: mysql_version.stdout.find("8.") != -1
+
+- name: "---and---"
+  debug:
+    msg: "LSN: {{ item }}"
+  with_items:
+    - Backup - "{{lsn_backup.stdout}}"
+    - Preparing - "{{lsn_preparing.stdout}}"
+
+- name: ---Info Rollback---
+  debug:
+    msg: "Restoring: {{ item }}"
+  with_items:
+    - Full Backup with innobackupex - innobackupex --copy-back "{{ backupdir }}"
+    - Documentation - https://www.percona.com/doc/percona-xtrabackup/2.4/innobackupex/restoring_a_backup_ibk.html
+    - Full Backup with xtrabackup   - xtrabackup --copy-back --target-dir="{{ backupdir }}"
+    - Documentation - https://www.percona.com/doc/percona-xtrabackup/[8.0,2.4]/backup_scenarios/full_backup.html#restoring-a-backup
